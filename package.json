@@ -1,0 +1,12 @@
+{
+  "name": "cyberescaper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CyberEscaper 4.0 · escape room de ciberseguretat per a 4t d'ESO (Digitalització). Web estàtica, sense servidor.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  }
+}

@@ -1,0 +1,5 @@
+/* Impressió: només el contingut, en blanc i negre. */
+.topbar, .footer, .tts-btn, .btn, .skip-link, .hints, .a11y-menu, .toast { display: none !important; }
+body { background: #fff !important; color: #000 !important; }
+.card, .block, .shadow-msg { border: 1px solid #000 !important; background: #fff !important; color: #000 !important; break-inside: avoid; }
+a { color: #000; }
