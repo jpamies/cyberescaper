@@ -2,8 +2,8 @@
 
 > *Escape room de ciberseguretat per a 4t d'ESO (Digitalització). Català i castellà.*
 
-**▶ Jugar:** https://jpamies.github.io/cyberescaper/
-**Página docente:** https://jpamies.github.io/cyberescaper/docente.html
+**▶ Jugar:** https://jpamies.com/cyberescaper/ (también https://jpamies.github.io/cyberescaper/, que redirige)
+**Página docente:** https://jpamies.com/cyberescaper/docente.html
 
 CyberEscaper es la webapp de una actividad didáctica para **4.º de ESO, materia Digitalització (Cataluña)**, competencia específica 3 (criterios 3.1, 3.2 y 3.3). El grupo de hackers *Les Ombres* ha secuestrado el servidor del instituto con un ransomware; el aula se convierte en un SOC y cada equipo azul supera 5 niveles para recuperar el sistema:
 
