@@ -10,7 +10,7 @@ export function eventSummary(b) {
   switch (b.type) {
     case 'genesis': return t('chainView.sum.genesis', { alias: d.alias, n: (d.members || []).length });
     case 'session_start': return t('chainView.sum.session_start', { s: d.session });
-    case 'session_pause': return t('chainView.sum.session_pause', { s: d.session, min: Math.round((d.elapsedSec || 0) / 60) });
+    case 'session_pause': return t(d.ended ? 'chainView.sum.session_end' : 'chainView.sum.session_pause', { s: d.session, min: Math.round((d.elapsedSec || 0) / 60) });
     case 'hint_used': return t('chainView.sum.hint_used', { level: d.level, n: d.hint });
     case 'level_completed': return t('chainView.sum.level_completed', { level: d.level, points: d.points });
     case 'overtime': return t('chainView.sum.overtime', { s: d.session, n: d.penalty });

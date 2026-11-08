@@ -36,9 +36,9 @@ Grupo de 25 alumnos en 6 equipos (cinco de 4 y uno de 5), con los ordenadores de
 2. Registro: alias del equipo (3–20 letras o números, **sin nombres reales**), número de miembros y, para cada miembro, rol y especialidad (y como mucho un emoji o una inicial). Deben estar los 4 roles y las 4 especialidades.
 3. **Activar la sesión**: «Iniciar sesión 2» (en el mapa o en la propia pantalla del nivel). **Sin la sesión activa no se puede jugar**: el nivel muestra una pantalla para activarla. Cada sesión tiene **30 minutos** de juego (se dejan 10 min al principio y al final de la clase para preparar y cerrar).
 4. Nivel 0. En cuanto el equipo supera **todos los niveles de la sesión**, el reloj se para y se pone **en verde con el tiempo que ha sobrado** («Sesión 2 completada · sobran 07:32»). Si llega a cero antes, no se bloquea nada: entra en **prórroga** y resta 5 puntos una sola vez.
-5. Al acabar la clase: **«Descargar el JSON»** (por si el ordenador cambia o se borran los datos). Si no han acabado, «Pausar sesión 2».
+5. Al acabar la clase: **«🚪 Salir de la sesión»** (en la cabecera o en el mapa). Para el reloj (queda registrado en la cadena), permite **descargar el JSON** y, si el ordenador lo usa otro grupo, **borrar la partida** de ese ordenador (si no se ha descargado, el JSON se descarga automáticamente antes de borrar). Vuelve a la portada. El próximo día: «Continuar la partida» o «Importar partida» con el JSON. «Pausa» es solo para paradas cortas dentro de la clase.
 
-**Sesión 3 · Niveles 1 y 2.** Si el progreso no está en el ordenador: *Registro → Importar partida* con el JSON. «Iniciar sesión 3». Al final, descargar el JSON.
+**Sesión 3 · Niveles 1 y 2.** Si el progreso no está en el ordenador: *Registro → Importar partida* con el JSON. «Iniciar sesión 3». Al final, «Salir de la sesión».
 
 Reglas del temporizador: las sesiones se inician en orden (no se puede iniciar la 3 sin haber empezado la 2); con una sesión activa se pueden jugar sus niveles **y los atrasados** de sesiones anteriores, pero no los de una sesión posterior que no se ha activado; una sesión completada ya no se puede reanudar. Las pausas y el tiempo de cada sesión quedan en la cadena y la docente los ve en el verificador.
 

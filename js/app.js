@@ -325,6 +325,40 @@ function renderTeam(root) {
 // ---------------------------------------------------------------------------
 // Mapa de missió
 // ---------------------------------------------------------------------------
+function downloadJson() {
+  const obj = state.exportObject();
+  downloadBlob(new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' }), exportFileName(obj.header.alias, 'json'));
+}
+
+/** «Sortir de la sessió»: atura el rellotge, ofereix descarregar el JSON i, si cal, esborrar l'ordinador. */
+async function exitSession() {
+  if (!state.hasTeam()) return;
+  const st = state.derivedNow();
+  const s = st.activeSession ?? [4, 3, 2].find((n) => st.sessions[n].started);
+  let downloaded = false;
+  const dlStatus = h('span', { class: 'small', role: 'status', 'aria-live': 'polite' });
+  const dlBtn = h('button', { type: 'button', class: 'btn' }, '⬇ ', t('download.json'));
+  dlBtn.addEventListener('click', () => { downloadJson(); downloaded = true; dlStatus.textContent = t('exit.downloaded'); });
+  const wipe = h('input', { type: 'checkbox', id: 'exit-wipe' });
+  const body = h('div', {},
+    h('p', {}, st.activeSession ? t('exit.body', { s }) : t('exit.bodyStopped')),
+    h('div', { class: 'btn-row' }, dlBtn, dlStatus),
+    h('label', { for: 'exit-wipe', class: 'check' }, wipe, ' ', t('exit.wipe')));
+  const ok = await dialog({ title: s ? t('exit.title', { s }) : t('exit.button'), body, confirmText: '🚪 ' + t('exit.confirm') });
+  if (!ok) return;
+  if (state.derivedNow().activeSession) await timer.endSession();
+  if (wipe.checked) {
+    if (!downloaded) downloadJson(); // mai no s'esborra sense haver descarregat el progrés
+    await new Promise((r) => setTimeout(r, 400));
+    state.wipe();
+    toast(t('exit.doneWiped'));
+  } else {
+    toast(s ? t('exit.done', { s }) : t('exit.doneNoSession'));
+  }
+  renderChrome();
+  navigate('#/inici');
+}
+
 function downloadPanel() {
   const status = h('p', { role: 'status', 'aria-live': 'polite', class: 'small' });
   const alias = state.derived().team.alias;
@@ -473,6 +507,7 @@ async function start() {
   const res = await state.load();
   if (res.corrupted !== undefined) toast(t('errors.cacheCorrupted'));
   await timer.reconcile();
+  timer.setExitHandler(exitSession);
   renderChrome();
   timer.startTicking();
   onLangChange(() => { renderChrome(); render(); });

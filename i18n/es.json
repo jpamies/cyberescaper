@@ -179,6 +179,20 @@
     "help": "Podéis acabar niveles atrasados en una sesión posterior, pero no podéis avanzar niveles de una sesión que todavía no habéis activado.",
     "lock": "La sesión está en pausa. Activadla para poder abrir el candado."
   },
+  "exit": {
+    "button": "Salir de la sesión",
+    "title": "¿Salir de la sesión {s}?",
+    "body": "El reloj de la sesión {s} se parará y quedará registrado. Antes de iros, descargad el progreso (JSON) para continuar otro día o en otro ordenador.",
+    "bodyStopped": "No hay ninguna sesión en marcha. Antes de iros, descargad el progreso (JSON) para continuar otro día o en otro ordenador.",
+    "downloaded": "JSON descargado ✔",
+    "wipe": "Borrar la partida de este ordenador (si lo usa otro grupo). Si no lo habéis descargado, el JSON se descargará automáticamente antes de borrar.",
+    "confirm": "Salir",
+    "done": "Sesión {s} cerrada. ¡Hasta la próxima clase!",
+    "doneNoSession": "¡Hasta la próxima clase!",
+    "doneWiped": "Sesión cerrada y datos borrados de este ordenador. Traed el JSON a la próxima clase y usad «Importar partida».",
+    "help": "Al final de la clase, pulsad «Salir de la sesión»: se para el reloj, podéis descargar el progreso y, si el ordenador es compartido, borrar la partida.",
+    "short": "Salir"
+  },
   "download": {
     "title": "Descargar progreso",
     "help": "Descargad el JSON (para continuar en otro ordenador) y el PDF (para entregar a la docente). Tienen el mismo contenido.",
@@ -287,7 +301,8 @@
       "level_completed": "Nivel {level} superado (+{points})",
       "overtime": "Prórroga en la sesión {s} (−{n})",
       "import": "Partida importada desde un archivo",
-      "final": "Sistema restaurado: {points} puntos"
+      "final": "Sistema restaurado: {points} puntos",
+      "session_end": "Salida de la sesión {s} ({min} min)"
     }
   },
   "level0": {

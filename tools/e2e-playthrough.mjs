@@ -88,6 +88,21 @@ await page.screenshot({ path: join(OUT, '03b-mapa-sessio2-verd.png') });
 await page.click('.timer-panel .session-btn[data-session="3"]');
 await page.waitForSelector('.timer-panel .session-btn[data-session="3"][aria-pressed="true"]');
 
+step('sortir de la sessió 3 a mitja classe (amb descàrrega) i tornar-hi');
+await page.click('.timer-badge .btn-exit');
+await page.waitForSelector('dialog[open]');
+const [dlExit] = await Promise.all([page.waitForEvent('download'), page.click('dialog[open] .btn-row .btn')]);
+await page.screenshot({ path: join(OUT, '03c-sortir.png') });
+await confirmDialog();
+await page.waitForSelector('.red-alert');
+const ended = await page.evaluate(() => JSON.parse(localStorage.getItem('cyberescaper:v1:chain')).at(-1));
+if (!(ended.type === 'session_pause' && ended.data.ended && ended.data.session === 3)) errors.push('exit not recorded: ' + JSON.stringify(ended));
+if (!dlExit.suggestedFilename().endsWith('.json')) errors.push('exit download is not json');
+await page.click('a.btn-primary.btn-big');
+await page.waitForSelector('.timer-panel');
+await page.click('.timer-panel .session-btn[data-session="3"]');
+await page.waitForSelector('.timer-panel .session-btn[data-session="3"][aria-pressed="true"]');
+
 // ---------- Nivell 1 ----------
 await page.goto(BASE + '#/nivell/1');
 await page.waitForSelector('.classify');

@@ -49,7 +49,26 @@ export async function startSession(n) {
   tick();
 }
 
-async function stopClock({ auto = false, completed = false, at = Date.now() } = {}) {
+let exitHandler = null;
+/** L'app registra aquí què fa el botó «Sortir de la sessió». */
+export function setExitHandler(fn) {
+  exitHandler = fn;
+}
+
+function exitButton(small = true) {
+  const b = small
+    ? h('button', { type: 'button', class: 'btn btn-small btn-exit', 'aria-label': t('exit.button'), title: t('exit.button') }, h('span', { 'aria-hidden': 'true' }, '🚪 ' + t('exit.short')))
+    : h('button', { type: 'button', class: 'btn btn-exit' }, h('span', { 'aria-hidden': 'true' }, '🚪 '), t('exit.button'));
+  b.addEventListener('click', () => exitHandler?.());
+  return b;
+}
+
+/** Atura el rellotge en sortir de la sessió (si n'hi ha cap en marxa). */
+export function endSession() {
+  return stopClock({ ended: true });
+}
+
+async function stopClock({ auto = false, completed = false, ended = false, at = Date.now() } = {}) {
   const cur = state.derivedNow();
   const s = cur.activeSession;
   if (!s) return null;
@@ -58,6 +77,7 @@ async function stopClock({ auto = false, completed = false, at = Date.now() } = 
   const data = { session: s, elapsedSec };
   if (auto) data.auto = true;
   if (completed) data.completed = true;
+  if (ended) data.ended = true;
   await state.append('session_pause', data);
   tick();
   return { session: s, remaining: SESSION_SECONDS - elapsedSec };
@@ -125,12 +145,14 @@ function lastStarted(st) {
 export function timerBadge() {
   const text = h('span', { class: 'timer-text' });
   const btn = h('button', { type: 'button', class: 'btn btn-small' });
+  const exit = exitButton();
   const box = h('div', { class: 'timer-badge', role: 'group', 'aria-label': t('timer.title') },
-    h('span', { 'aria-hidden': 'true' }, '⏱ '), text, btn);
+    h('span', { 'aria-hidden': 'true' }, '⏱ '), text, btn, exit);
   box._update = (s) => {
     const st = s.st;
     if (!st.team) { box.hidden = true; return; }
     box.hidden = false;
+    exit.hidden = !SESSIONS.some((n) => st.sessions[n].started);
     box.classList.remove('overtime', 'done');
     if (s.session) {
       box.classList.toggle('overtime', s.overtime);
@@ -210,7 +232,9 @@ export function timerPanel() {
   const panel = h('section', { class: 'card timer-panel', 'aria-labelledby': 'timer-h' },
     h('h2', { id: 'timer-h' }, '⏱ ', t('timer.title')),
     info, buttons,
-    h('p', { class: 'muted small' }, t('timer.explain', { min: SESSION_SECONDS / 60, n: OVERTIME_PENALTY }))
+    h('div', { class: 'btn-row' }, exitButton(false)),
+    h('p', { class: 'muted small' }, t('timer.explain', { min: SESSION_SECONDS / 60, n: OVERTIME_PENALTY })),
+    h('p', { class: 'muted small' }, t('exit.help'))
   );
   panel._update = (s) => {
     const st = s.st;

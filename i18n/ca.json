@@ -179,6 +179,20 @@
     "help": "Podeu acabar nivells endarrerits en una sessió posterior, però no podeu avançar nivells d'una sessió que encara no heu activat.",
     "lock": "La sessió està en pausa. Activeu-la per poder obrir el cadenat."
   },
+  "exit": {
+    "button": "Sortir de la sessió",
+    "title": "Sortir de la sessió {s}?",
+    "body": "El rellotge de la sessió {s} s'aturarà i quedarà registrat. Abans de marxar, descarregueu el progrés (JSON) per continuar un altre dia o en un altre ordinador.",
+    "bodyStopped": "No hi ha cap sessió en marxa. Abans de marxar, descarregueu el progrés (JSON) per continuar un altre dia o en un altre ordinador.",
+    "downloaded": "JSON descarregat ✔",
+    "wipe": "Esborrar la partida d'aquest ordinador (si el fa servir un altre grup). Si no l'heu descarregat, el JSON es descarregarà automàticament abans d'esborrar.",
+    "confirm": "Sortir",
+    "done": "Sessió {s} tancada. Fins a la pròxima classe!",
+    "doneNoSession": "Fins a la pròxima classe!",
+    "doneWiped": "Sessió tancada i dades esborrades d'aquest ordinador. Porteu el JSON a la pròxima classe i feu «Importar partida».",
+    "help": "Al final de la classe, premeu «Sortir de la sessió»: s'atura el rellotge, podeu descarregar el progrés i, si l'ordinador és compartit, esborrar-ne la partida.",
+    "short": "Sortir"
+  },
   "download": {
     "title": "Descarregar progrés",
     "help": "Descarregueu el JSON (per continuar en un altre ordinador) i el PDF (per lliurar a la docent). Tenen el mateix contingut.",
@@ -287,7 +301,8 @@
       "level_completed": "Nivell {level} superat (+{points})",
       "overtime": "Pròrroga a la sessió {s} (−{n})",
       "import": "Partida importada des d'un fitxer",
-      "final": "Sistema restaurat: {points} punts"
+      "final": "Sistema restaurat: {points} punts",
+      "session_end": "Sortida de la sessió {s} ({min} min)"
     }
   },
   "level0": {
