@@ -50,12 +50,15 @@ await page.fill('#alias', 'FalconsBlaus');
 await page.click('form button[type=submit]');
 await page.waitForSelector('.levels');
 
-step('sessió 2');
-await page.click('.timer-panel .btn >> nth=0');
-await page.waitForTimeout(300);
+step('sense sessió activa, el nivell 0 demana activar-la');
+await page.click('a[href="#/nivell/0"]');
+await page.waitForSelector('.gate');
+if (await page.$('.scene')) errors.push('level playable without an active session');
+await page.screenshot({ path: join(OUT, '01b-cal-activar-sessio.png'), fullPage: true });
+step('sessió 2 (des del nivell)');
+await page.click('.gate .session-btn[data-session="2"]');
 
 // ---------- Nivell 0 ----------
-await page.click('a[href="#/nivell/0"]');
 await page.waitForSelector('.scene');
 for (const z of ['postit', 'session', 'usb', 'email', 'wifi', 'antivirus', 'update', 'file', 'plant']) await page.click(`.zone[data-zone="${z}"]`);
 await page.fill('#l0-answer', '7');
@@ -70,13 +73,20 @@ await page.screenshot({ path: join(OUT, '02-nivell0.png'), fullPage: true });
 await page.fill('#l0-answer', '8');
 await openLock();
 await expectSuccess(0);
+step('sessió 2 completada: rellotge aturat en verd');
+await page.waitForSelector('.session-done');
+await page.waitForSelector('.timer-badge.done');
 await page.screenshot({ path: join(OUT, '03-nivell0-superat.png') });
 
-step('pausa i sessió 3');
+step('el nivell 1 (sessió 3) no es pot avançar');
+await page.goto(BASE + '#/nivell/1');
+await page.waitForSelector('.gate');
+step('sessió 3 des del mapa');
 await page.goto(BASE + '#/mapa');
-await page.waitForSelector('.timer-panel');
-await page.click('.timer-panel .btn >> nth=1');
-await page.waitForTimeout(300);
+await page.waitForSelector('.timer-panel .btn-done');
+await page.screenshot({ path: join(OUT, '03b-mapa-sessio2-verd.png') });
+await page.click('.timer-panel .session-btn[data-session="3"]');
+await page.waitForSelector('.timer-panel .session-btn[data-session="3"][aria-pressed="true"]');
 
 // ---------- Nivell 1 ----------
 await page.goto(BASE + '#/nivell/1');
@@ -132,8 +142,8 @@ await page.selectOption('#lang-select', 'ca');
 await page.waitForFunction(() => document.documentElement.lang === 'ca');
 await page.goto(BASE + '#/mapa');
 await page.waitForSelector('.timer-panel');
-await page.click('.timer-panel .btn >> nth=2');
-await page.waitForTimeout(300);
+await page.click('.timer-panel .session-btn[data-session="4"]');
+await page.waitForSelector('.timer-panel .session-btn[data-session="4"][aria-pressed="true"]');
 
 // ---------- Nivell 3 ----------
 await page.goto(BASE + '#/nivell/3');

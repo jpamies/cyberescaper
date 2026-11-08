@@ -128,7 +128,7 @@ export async function generatePdf(exportObj) {
   heading(t('pdf.sessionsTitle'));
   for (const s of [2, 3, 4]) {
     const ses = st.sessions[s];
-    para(`${t('pdf.session')} ${s}: ${ses.started ? Math.round(ses.elapsedSec / 60) + ' min' : '—'}${s in st.overtime ? ' · ' + t('pdf.overtime') : ''} · ${t('pdf.hintsInSession')}: ${st.hintsBySession[s] || 0}`, { size: 9.5, gap: 0.5 });
+    para(`${t('pdf.session')} ${s}: ${ses.started ? Math.round(ses.elapsedSec / 60) + ' min' : '—'}${s in st.overtime ? ' · ' + t('pdf.overtime') : ''}${ses.completed ? ' · ' + t('pdf.completed') : ''} · ${t('pdf.hintsInSession')}: ${st.hintsBySession[s] || 0}`, { size: 9.5, gap: 0.5 });
   }
 
   // --- Cadena ----------------------------------------------------------------

@@ -16,7 +16,16 @@
     "listen": "Escolta en veu alta",
     "listenLabel": "Escolta en veu alta: {what}",
     "noVoice": "Aquest dispositiu no té cap veu en {lang}. La lectura en veu alta no està disponible.",
-    "skip": "Salta al contingut"
+    "skip": "Salta al contingut",
+    "voice": "Veu per llegir en veu alta",
+    "voiceAuto": "Automàtica: {name}",
+    "voiceOff": "Cap (no llegir en veu alta)",
+    "voiceNone": "No hi ha cap veu en {lang} en aquest dispositiu",
+    "voiceOnline": "en línia",
+    "voiceTest": "Prova",
+    "voiceSample": "Hola! Aquesta és la veu que llegirà els textos de CyberEscaper.",
+    "voiceUsing": "Veu actual: {name}.",
+    "voiceHelp": "Si no sona en {lang}, trieu una altra veu o instal·leu-ne una al sistema (Configuració → Hora i idioma → Veu). Les veus «en línia» envien el text al servidor del navegador."
   },
   "nav": {
     "label": "Navegació principal",
@@ -133,7 +142,8 @@
     "statusLocked": "Bloquejat",
     "lockedHelp": "Supereu el nivell anterior per obrir-lo.",
     "lockedToast": "Aquest nivell encara està bloquejat.",
-    "sessionN": "sessió {s}"
+    "sessionN": "sessió {s}",
+    "statusNeedSession": "Cal activar la sessió {s}"
   },
   "timer": {
     "title": "Temporitzador de la sessió",
@@ -149,9 +159,25 @@
     "overtimeShort": "S{s} · pròrroga +{time}",
     "runningLong": "Sessió {s} en marxa. Queden {time} minuts.",
     "overtimeLong": "Sessió {s} en pròrroga: +{time}.",
-    "explain": "És un compte enrere de 50 minuts per sessió. Quan arriba a zero no es bloqueja res: entreu en pròrroga i es resten {n} punts una sola vegada. Les pauses queden registrades.",
+    "explain": "Cada sessió té {min} minuts. Per jugar els nivells, activeu la sessió quan comenceu la classe: el rellotge comença a comptar. Quan supereu tots els nivells de la sessió, el rellotge s'atura i es posa en verd amb el temps que ha sobrat. Si arriba a zero no es bloqueja res: entreu en pròrroga i es resten {n} punts una sola vegada. Les pauses queden registrades.",
     "minutesLeft": "Queden {n} minuts de sessió.",
-    "overtimeStarted": "S'ha acabat el temps. Entreu en pròrroga: es resten {n} punts."
+    "overtimeStarted": "S'ha acabat el temps. Entreu en pròrroga: es resten {n} punts.",
+    "left": "sobren {time}",
+    "over": "pròrroga +{time}",
+    "completedShort": "S{s} completada · {left}",
+    "completedLong": "Sessió {s} completada: {left}.",
+    "doneButton": "Sessió {s} completada ({left})",
+    "notYet": "Primer cal haver començat la sessió {p}.",
+    "sessionDoneMsg": "Sessió {s} completada! Heu superat tots els nivells de la sessió: {left}.",
+    "sessionDoneNext": "A la pròxima classe, activeu la sessió {s} per continuar."
+  },
+  "gate": {
+    "title": "Activeu la sessió {s} per jugar",
+    "text": "Aquest nivell és de la sessió {s}. Activeu-la quan comenceu la classe: el temporitzador començarà a comptar {min} minuts. Quan supereu tots els nivells de la sessió, el rellotge s'aturarà en verd.",
+    "later": "Ara teniu activa la sessió {active}, però aquest nivell és de la sessió {s}. Encara no hi podeu jugar.",
+    "none": "Encara no es pot activar: primer cal haver començat la sessió anterior.",
+    "help": "Podeu acabar nivells endarrerits en una sessió posterior, però no podeu avançar nivells d'una sessió que encara no heu activat.",
+    "lock": "La sessió està en pausa. Activeu-la per poder obrir el cadenat."
   },
   "download": {
     "title": "Descarregar progrés",
@@ -196,16 +222,33 @@
     "successTitle": "Nivell {n} superat",
     "noHintsBadge": "Insígnia «Sense pistes»: heu superat el nivell sense fer servir cap Targeta Firewall!",
     "nextLevel": "Anar al nivell {n}",
-    "toFinal": "Restaurar el sistema",
-    "sessionEnd": "Aquí acaba la feina de la sessió {s}. Si encara teniu temps, podeu continuar o descarregar el progrés al mapa."
+    "toFinal": "Restaurar el sistema"
   },
   "badges": {
-    "access": { "name": "Accés concedit", "icon": "🔓" },
-    "passwords": { "name": "Guardià de contrasenyes", "icon": "🔑" },
-    "phishing": { "name": "Caçador de phishing", "icon": "🎣" },
-    "identity": { "name": "Protector d'identitat", "icon": "🪪" },
-    "crypto": { "name": "Criptògraf", "icon": "🔐" },
-    "nohints": { "name": "Sense pistes", "icon": "🌟" }
+    "access": {
+      "name": "Accés concedit",
+      "icon": "🔓"
+    },
+    "passwords": {
+      "name": "Guardià de contrasenyes",
+      "icon": "🔑"
+    },
+    "phishing": {
+      "name": "Caçador de phishing",
+      "icon": "🎣"
+    },
+    "identity": {
+      "name": "Protector d'identitat",
+      "icon": "🪪"
+    },
+    "crypto": {
+      "name": "Criptògraf",
+      "icon": "🔐"
+    },
+    "nohints": {
+      "name": "Sense pistes",
+      "icon": "🌟"
+    }
   },
   "summary": {
     "yes": "sí",
@@ -280,16 +323,46 @@
       "postit1": "Contrasenya:"
     },
     "zones": {
-      "postit": { "label": "Pòsit enganxat al monitor", "explain": "És un risc. Una contrasenya escrita en un pòsit la pot veure qualsevol persona que passi. Les contrasenyes s'han de recordar o guardar en un gestor de contrasenyes." },
-      "session": { "label": "Finestra de la sessió", "explain": "És un risc. La sessió és oberta i l'ordinador no està bloquejat. Quan us aixequeu, bloquegeu-lo (Windows + L)." },
-      "usb": { "label": "Memòria USB vermella", "explain": "És un risc. Un USB desconegut pot portar programari maliciós (malware). No connecteu mai un USB si no sabeu d'on ve." },
-      "email": { "label": "Correu obert", "explain": "És un risc. El correu fa pressa i demana clicar un enllaç per «verificar el compte». És phishing." },
-      "wifi": { "label": "Icona de la xarxa Wi-Fi", "explain": "És un risc. «WiFi_Gratis» és una xarxa oberta, sense contrasenya. Algú podria espiar el que s'hi envia." },
-      "antivirus": { "label": "Avís a la cantonada de la pantalla", "explain": "És un risc. L'antivirus està desactivat i l'ordinador queda indefens davant del malware." },
-      "update": { "label": "Finestra d'actualització", "explain": "És un risc. Ajornar l'actualització 30 dies deixa oberts forats de seguretat que els atacants coneixen." },
-      "file": { "label": "Fitxer de l'escriptori", "explain": "És un risc. Un fitxer «contrasenyes.txt» a l'escriptori és el primer lloc on miraria un atacant." },
-      "plant": { "label": "Planta", "explain": "Això no és un risc. És només una planta (i potser li cal aigua)." },
-      "calendar": { "label": "Calendari de la paret", "explain": "Això no és un risc. És el calendari escolar, que és informació pública." }
+      "postit": {
+        "label": "Pòsit enganxat al monitor",
+        "explain": "És un risc. Una contrasenya escrita en un pòsit la pot veure qualsevol persona que passi. Les contrasenyes s'han de recordar o guardar en un gestor de contrasenyes."
+      },
+      "session": {
+        "label": "Finestra de la sessió",
+        "explain": "És un risc. La sessió és oberta i l'ordinador no està bloquejat. Quan us aixequeu, bloquegeu-lo (Windows + L)."
+      },
+      "usb": {
+        "label": "Memòria USB vermella",
+        "explain": "És un risc. Un USB desconegut pot portar programari maliciós (malware). No connecteu mai un USB si no sabeu d'on ve."
+      },
+      "email": {
+        "label": "Correu obert",
+        "explain": "És un risc. El correu fa pressa i demana clicar un enllaç per «verificar el compte». És phishing."
+      },
+      "wifi": {
+        "label": "Icona de la xarxa Wi-Fi",
+        "explain": "És un risc. «WiFi_Gratis» és una xarxa oberta, sense contrasenya. Algú podria espiar el que s'hi envia."
+      },
+      "antivirus": {
+        "label": "Avís a la cantonada de la pantalla",
+        "explain": "És un risc. L'antivirus està desactivat i l'ordinador queda indefens davant del malware."
+      },
+      "update": {
+        "label": "Finestra d'actualització",
+        "explain": "És un risc. Ajornar l'actualització 30 dies deixa oberts forats de seguretat que els atacants coneixen."
+      },
+      "file": {
+        "label": "Fitxer de l'escriptori",
+        "explain": "És un risc. Un fitxer «contrasenyes.txt» a l'escriptori és el primer lloc on miraria un atacant."
+      },
+      "plant": {
+        "label": "Planta",
+        "explain": "Això no és un risc. És només una planta (i potser li cal aigua)."
+      },
+      "calendar": {
+        "label": "Calendari de la paret",
+        "explain": "Això no és un risc. És el calendari escolar, que és informació pública."
+      }
     },
     "hints": [
       "Mireu l'escena a poc a poc: el monitor, les finestres de la pantalla, la barra de baix, la taula i els cables. Els riscos poden ser objectes, finestres o icones.",
@@ -303,7 +376,11 @@
     "task": "Part A: classifiqueu 5 contrasenyes inventades. Part B: creeu una frase de contrasenya amb el mètode de la frase.",
     "partA": "Part A · Classifiqueu les contrasenyes",
     "partAHelp": "Totes són inventades. Decidiu si cada contrasenya és feble, mitjana o robusta. Podeu fer servir el comprovador.",
-    "levels": { "weak": "Feble", "medium": "Mitjana", "strong": "Robusta" },
+    "levels": {
+      "weak": "Feble",
+      "medium": "Mitjana",
+      "strong": "Robusta"
+    },
     "checker": {
       "title": "Comprovador de robustesa",
       "note": "Funciona dins del navegador: el que hi escriviu no s'envia ni es guarda enlloc.",
@@ -360,7 +437,12 @@
     "intro": "Ara atacarem pel mòbil. Correu, SMS, WhatsApp, Instagram... De vegades som nosaltres i de vegades no. Sabreu distingir-ho?",
     "task": "Reviseu els 8 missatges del mòbil del SOC. La pregunta no és de quina app ve, sinó què us demana i qui us l'envia.",
     "phone": "Mòbil del SOC",
-    "channels": { "email": "Correu", "sms": "SMS", "whatsapp": "WhatsApp", "instagram": "Instagram" },
+    "channels": {
+      "email": "Correu",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "instagram": "Instagram"
+    },
     "pending": "{n} per revisar",
     "done": "revisat ✔",
     "msgN": "Missatge {n}",
@@ -554,16 +636,46 @@
     "chooseMeasure": "Trieu una mesura...",
     "measureKo": "Aquesta mesura no és la millor per a aquesta dada. Penseu-hi una altra vegada.",
     "items": {
-      "birth": { "label": "Data de naixement a la biografia", "why": "Amb la data de naixement es poden endevinar contrasenyes i respostes de seguretat. No s'ha de publicar." },
-      "phone": { "label": "Telèfon a la biografia", "why": "Qualsevol persona podria trucar-li o enviar-li missatges. El telèfon no es publica." },
-      "school": { "label": "Nom de l'institut a l'uniforme", "why": "Diu a desconeguts on és cada dia. Millor eliminar la foto o fer el perfil privat." },
-      "location": { "label": "Ubicació en temps real", "why": "Diu on és ara mateix. Cal desactivar la ubicació (o eliminar la publicació)." },
-      "pet": { "label": "Nom de la mascota", "why": "«Nom de la teva mascota» és una pregunta de seguretat típica: és la resposta per recuperar el seu correu!" },
-      "street": { "label": "Carrer i portal de casa", "why": "La foto mostra on viu. S'ha d'eliminar la publicació." },
-      "schedule": { "label": "Horari d'entrenament", "why": "Diu on serà cada setmana i a quina hora. Millor no publicar-ho." },
-      "ticket": { "label": "Codi del bitllet de viatge", "why": "Amb el codi algú podria canviar o cancel·lar el viatge, i a més diu que la casa estarà buida. S'ha d'eliminar." },
-      "hobby": { "label": "Afició al bàsquet", "why": "Això no és un risc: dir que t'agrada un esport, sense dades concretes, no et posa en perill." },
-      "firstday": { "label": "Text «Primer dia de curs»", "why": "El text sol no és un risc. Fixeu-vos bé en la foto, en canvi..." }
+      "birth": {
+        "label": "Data de naixement a la biografia",
+        "why": "Amb la data de naixement es poden endevinar contrasenyes i respostes de seguretat. No s'ha de publicar."
+      },
+      "phone": {
+        "label": "Telèfon a la biografia",
+        "why": "Qualsevol persona podria trucar-li o enviar-li missatges. El telèfon no es publica."
+      },
+      "school": {
+        "label": "Nom de l'institut a l'uniforme",
+        "why": "Diu a desconeguts on és cada dia. Millor eliminar la foto o fer el perfil privat."
+      },
+      "location": {
+        "label": "Ubicació en temps real",
+        "why": "Diu on és ara mateix. Cal desactivar la ubicació (o eliminar la publicació)."
+      },
+      "pet": {
+        "label": "Nom de la mascota",
+        "why": "«Nom de la teva mascota» és una pregunta de seguretat típica: és la resposta per recuperar el seu correu!"
+      },
+      "street": {
+        "label": "Carrer i portal de casa",
+        "why": "La foto mostra on viu. S'ha d'eliminar la publicació."
+      },
+      "schedule": {
+        "label": "Horari d'entrenament",
+        "why": "Diu on serà cada setmana i a quina hora. Millor no publicar-ho."
+      },
+      "ticket": {
+        "label": "Codi del bitllet de viatge",
+        "why": "Amb el codi algú podria canviar o cancel·lar el viatge, i a més diu que la casa estarà buida. S'ha d'eliminar."
+      },
+      "hobby": {
+        "label": "Afició al bàsquet",
+        "why": "Això no és un risc: dir que t'agrada un esport, sense dades concretes, no et posa en perill."
+      },
+      "firstday": {
+        "label": "Text «Primer dia de curs»",
+        "why": "El text sol no és un risc. Fixeu-vos bé en la foto, en canvi..."
+      }
     },
     "foundOne": "Dada trobada: {what}. Ara trieu una mesura a la llista de sota.",
     "foundTitle": "Dades trobades",
@@ -690,22 +802,70 @@
     "title": "Glossari",
     "help": "Paraules clau de la ciberseguretat, en català i en castellà.",
     "terms": {
-      "password": { "term": "contrasenya", "def": "Paraula o frase secreta per entrar en un compte. Només la sabeu vosaltres." },
-      "link": { "term": "enllaç", "def": "Text o botó que porta a una pàgina web. Abans de clicar, mireu on porta." },
-      "sender": { "term": "remitent", "def": "Qui envia un missatge o un correu. Es pot falsificar." },
-      "attachment": { "term": "fitxer adjunt", "def": "Fitxer que va amb un correu o un missatge. Pot portar malware." },
-      "phishing": { "term": "phishing", "def": "Engany per robar contrasenyes o dades fent-se passar per algú de confiança." },
-      "smishing": { "term": "smishing", "def": "Phishing que arriba per SMS." },
-      "malware": { "term": "programari maliciós (malware)", "def": "Programa fet per fer mal: espiar, robar dades o espatllar l'ordinador." },
-      "ransomware": { "term": "ransomware", "def": "Malware que bloqueja o xifra les dades i demana un rescat per tornar-les." },
-      "encrypt": { "term": "xifrar", "def": "Transformar un missatge perquè només el pugui llegir qui té la clau." },
-      "decrypt": { "term": "desxifrar", "def": "Tornar un missatge xifrat al text original amb la clau." },
-      "hash": { "term": "hash", "def": "«Empremta» d'unes dades. Si canvia una sola lletra, el hash canvia del tot." },
-      "twofa": { "term": "verificació en dos passos", "def": "Entrar amb la contrasenya i, a més, amb un codi del mòbil o d'una app." },
-      "backup": { "term": "còpia de seguretat", "def": "Còpia de les dades en un altre lloc per no perdre-les." },
-      "privacy": { "term": "privadesa", "def": "Dret a decidir qui veu la vostra informació personal." },
-      "footprint": { "term": "petjada digital", "def": "Tot el rastre que deixeu a internet: publicacions, fotos, cerques..." },
-      "update": { "term": "actualització", "def": "Versió nova d'un programa que sovint tapa forats de seguretat." }
+      "password": {
+        "term": "contrasenya",
+        "def": "Paraula o frase secreta per entrar en un compte. Només la sabeu vosaltres."
+      },
+      "link": {
+        "term": "enllaç",
+        "def": "Text o botó que porta a una pàgina web. Abans de clicar, mireu on porta."
+      },
+      "sender": {
+        "term": "remitent",
+        "def": "Qui envia un missatge o un correu. Es pot falsificar."
+      },
+      "attachment": {
+        "term": "fitxer adjunt",
+        "def": "Fitxer que va amb un correu o un missatge. Pot portar malware."
+      },
+      "phishing": {
+        "term": "phishing",
+        "def": "Engany per robar contrasenyes o dades fent-se passar per algú de confiança."
+      },
+      "smishing": {
+        "term": "smishing",
+        "def": "Phishing que arriba per SMS."
+      },
+      "malware": {
+        "term": "programari maliciós (malware)",
+        "def": "Programa fet per fer mal: espiar, robar dades o espatllar l'ordinador."
+      },
+      "ransomware": {
+        "term": "ransomware",
+        "def": "Malware que bloqueja o xifra les dades i demana un rescat per tornar-les."
+      },
+      "encrypt": {
+        "term": "xifrar",
+        "def": "Transformar un missatge perquè només el pugui llegir qui té la clau."
+      },
+      "decrypt": {
+        "term": "desxifrar",
+        "def": "Tornar un missatge xifrat al text original amb la clau."
+      },
+      "hash": {
+        "term": "hash",
+        "def": "«Empremta» d'unes dades. Si canvia una sola lletra, el hash canvia del tot."
+      },
+      "twofa": {
+        "term": "verificació en dos passos",
+        "def": "Entrar amb la contrasenya i, a més, amb un codi del mòbil o d'una app."
+      },
+      "backup": {
+        "term": "còpia de seguretat",
+        "def": "Còpia de les dades en un altre lloc per no perdre-les."
+      },
+      "privacy": {
+        "term": "privadesa",
+        "def": "Dret a decidir qui veu la vostra informació personal."
+      },
+      "footprint": {
+        "term": "petjada digital",
+        "def": "Tot el rastre que deixeu a internet: publicacions, fotos, cerques..."
+      },
+      "update": {
+        "term": "actualització",
+        "def": "Versió nova d'un programa que sovint tapa forats de seguretat."
+      }
     }
   },
   "pdf": {
@@ -744,7 +904,8 @@
     "codeExplain": "Aquest codi és la cadena completa comprimida. Es pot enganxar a la pàgina docent per verificar-la o a «Importar partida» per continuar.",
     "qrNote": "El codi QR conté el mateix codi de verificació.",
     "qrTooBig": "El codi és massa llarg per a un QR: feu servir el text de dalt o el fitxer JSON.",
-    "footer": "Document generat sense servidor. No conté dades personals."
+    "footer": "Document generat sense servidor. No conté dades personals.",
+    "completed": "completada"
   },
   "teacher": {
     "title": "Pàgina docent",
@@ -821,7 +982,7 @@
     "usageTitle": "Instruccions d'ús",
     "usage": [
       "Abans de la sessió 2: obriu l'app als ordinadors del centre i comproveu que s'hi veu la portada. Funciona sense internet un cop carregada.",
-      "Sessió 2: cada equip crea el seu àlies (sense noms reals), tria rols i especialitats i prem «Iniciar sessió 2». Fan el nivell 0.",
+      "Sessió 2: cada equip crea el seu àlies (sense noms reals), tria rols i especialitats i prem «Iniciar sessió 2». Sense activar la sessió no es pot jugar. Tenen 30 minuts per al nivell 0; si l'acaben abans, el rellotge s'atura en verd amb el temps que ha sobrat.",
       "Al final de cada sessió: «Pausar sessió» i «Descarregar el JSON» des del mapa. Si l'ordinador pot canviar, guardeu el JSON (carpeta compartida o USB del centre).",
       "Sessió 3: si el progrés no hi és, «Importar partida» amb el JSON. «Iniciar sessió 3». Nivells 1 i 2.",
       "Sessió 4: «Iniciar sessió 4». Nivells 3 i 4. Al final, descarregar el PDF i el JSON, lliurar-los i prémer «Tancar i esborrar dades d'aquest ordinador».",

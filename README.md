@@ -31,13 +31,16 @@ Grupo de 25 alumnos en 6 equipos (cinco de 4 y uno de 5), con los ordenadores de
 
 **Antes de la sesión 2.** Abrir la URL en los ordenadores del centro y comprobar que carga la portada. Proyectar en la pizarra digital con *Accesibilidad → Alto contraste (modo claro)*.
 
-**Sesión 2 (50 min) · Nivel 0.**
+**Sesión 2 (clase de 50 min = 10 de preparación + 30 de juego + 10 de cierre) · Nivel 0.**
 1. Portada → «Entrar al SOC».
 2. Registro: alias del equipo (3–20 letras o números, **sin nombres reales**), número de miembros y, para cada miembro, rol y especialidad (y como mucho un emoji o una inicial). Deben estar los 4 roles y las 4 especialidades.
-3. En el mapa: «Iniciar sesión 2». La cuenta atrás de 50 min es narrativa: si llega a cero no bloquea nada, entra en **prórroga** y resta 5 puntos una sola vez.
-4. Nivel 0. Al acabar: «Pausar sesión 2» y **«Descargar el JSON»** (por si el ordenador cambia o se borran los datos).
+3. **Activar la sesión**: «Iniciar sesión 2» (en el mapa o en la propia pantalla del nivel). **Sin la sesión activa no se puede jugar**: el nivel muestra una pantalla para activarla. Cada sesión tiene **30 minutos** de juego (se dejan 10 min al principio y al final de la clase para preparar y cerrar).
+4. Nivel 0. En cuanto el equipo supera **todos los niveles de la sesión**, el reloj se para y se pone **en verde con el tiempo que ha sobrado** («Sesión 2 completada · sobran 07:32»). Si llega a cero antes, no se bloquea nada: entra en **prórroga** y resta 5 puntos una sola vez.
+5. Al acabar la clase: **«Descargar el JSON»** (por si el ordenador cambia o se borran los datos). Si no han acabado, «Pausar sesión 2».
 
-**Sesión 3 · Niveles 1 y 2.** Si el progreso no está en el ordenador: *Registro → Importar partida* con el JSON. «Iniciar sesión 3». Al final, pausar y descargar el JSON.
+**Sesión 3 · Niveles 1 y 2.** Si el progreso no está en el ordenador: *Registro → Importar partida* con el JSON. «Iniciar sesión 3». Al final, descargar el JSON.
+
+Reglas del temporizador: las sesiones se inician en orden (no se puede iniciar la 3 sin haber empezado la 2); con una sesión activa se pueden jugar sus niveles **y los atrasados** de sesiones anteriores, pero no los de una sesión posterior que no se ha activado; una sesión completada ya no se puede reanudar. Las pausas y el tiempo de cada sesión quedan en la cadena y la docente los ve en el verificador.
 
 **Sesión 4 · Niveles 3 y 4 e informe.** «Iniciar sesión 4». Al acabar el nivel 4 aparece «Sistema restaurado»: descargar **PDF y JSON**, entregarlos a la docente y pulsar **«Tancar i esborrar dades d'aquest ordinador»**.
 
@@ -103,7 +106,7 @@ NODE_PATH=$(npm root -g) node tools/e2e-playthrough.mjs http://localhost:8000/ .
 
 - **Textos:** todos están en `i18n/ca.json` (catalán, por defecto) y `i18n/es.json` (castellano), con las mismas claves. No hay texto de interfaz en el código. `node --test` avisa si falta una clave o si un `{parámetro}` no coincide.
 - **Datos y respuestas:** `js/levels/data.js` (niveles 0, 1, 3 y 4) y `js/levels/level2-data.js` (mensajes del nivel 2: canal, si es fraude, qué fragmentos son indicios, enlaces).
-- **Puntos, pistas, sesiones:** `js/derive.js` (`LEVEL_POINTS`, `HINT_COST`, `OVERTIME_PENALTY`, `SESSION_SECONDS`).
+- **Puntos, pistas, sesiones:** `js/derive.js` (`LEVEL_POINTS`, `HINT_COST`, `OVERTIME_PENALTY`, `SESSION_SECONDS` = 30 min, `LEVEL_SESSION` = qué niveles van en cada sesión).
 - **Añadir un idioma:** crear `i18n/<código>.json` con las mismas claves y añadir una línea al array `LANGS` de `js/i18n.js` (hay ejemplos comentados de `en` y `ar`). El CSS usa propiedades lógicas (`margin-inline-start`, `inset-inline-end`...) para que un idioma RTL no obligue a rehacer el diseño. Las frases del cifrado César (`level4.plain`, `level4.reply`) se cifran automáticamente; usad solo letras A–Z.
 
 ## Estructura
@@ -125,12 +128,12 @@ tools/     e2e-playthrough.mjs (opcional)
 
 ## Accesibilidad (DUA)
 
-Selector de idioma visible en todas las pantallas · botón 🔊 en cada pantalla, enunciado, pista y mensaje (Web Speech API en el idioma activo; si el dispositivo no tiene voz para ese idioma, el botón queda desactivado con un aviso) · 3 tamaños de letra (A, A+, A++) · modo claro de alto contraste · efecto máquina de escribir desactivable · respeta `prefers-reduced-motion` · todo usable con teclado (foco visible, pestañas con flechas, rueda de César con flechas, ordenar pasos con botones ↑↓ además de arrastrar) · `aria-live` para candados y feedback · nada depende solo del color (iconos ✔ ✖ 🔒 🚩 y texto) · textos alternativos en las ilustraciones · el temporizador también se muestra como texto y no bloquea nada · glosario con 16 términos en catalán y castellano con pictograma.
+Selector de idioma visible en todas las pantallas · botón 🔊 en cada pantalla, enunciado, pista y mensaje (Web Speech API en el idioma activo; solo se usan voces de ese idioma, primero las locales del dispositivo; en *Accesibilidad → Voz para leer en voz alta* se ve qué voz se usa, se puede probar, cambiar o desactivar; si el dispositivo no tiene voz para ese idioma, el botón queda desactivado con un aviso) · 3 tamaños de letra (A, A+, A++) · modo claro de alto contraste · efecto máquina de escribir desactivable · respeta `prefers-reduced-motion` · todo usable con teclado (foco visible, pestañas con flechas, rueda de César con flechas, ordenar pasos con botones ↑↓ además de arrastrar) · `aria-live` para candados y feedback · nada depende solo del color (iconos ✔ ✖ 🔒 🚩 y texto) · textos alternativos en las ilustraciones · el temporizador también se muestra como texto y no bloquea nada · glosario con 16 términos en catalán y castellano con pictograma.
 
 ## Pendientes conocidos
 
 - **Inglés y árabe**: la estructura está preparada, pero falta traducir y que lo revisen hablantes nativos; el árabe necesita además probar el RTL (no se ha probado en esta versión).
-- **Voz en catalán**: muchos Windows/Chromebooks no traen voz catalana; en ese caso el botón 🔊 se desactiva. Se puede instalar una voz catalana en el sistema.
+- **Voz en catalán**: muchos Windows/Chromebooks no traen voz catalana; en ese caso el botón 🔊 se desactiva. Se puede instalar una voz catalana en el sistema (Windows: *Configuración → Hora e idioma → Voz → Agregar voces → Català*). Algunos navegadores (sobre todo Chrome en Android o ChromeOS) anuncian una voz catalana que en realidad lee con otra voz: en ese caso, elegid otra voz en el menú de Accesibilidad. Las voces marcadas «en línea» envían el texto al servidor del fabricante del navegador; por eso la app prefiere siempre las locales.
 - El PDF usa Helvetica/Courier estándar (WinAnsi): los acentos catalanes y castellanos (à, ç, l·l, ñ...) salen bien, pero los emojis que se escriban en los informes se omiten en el PDF (en el JSON se conservan).
 - Si la partida se importa en otro ordenador, se restauran el nivel, los puntos, las insignias y las pistas, pero no el trabajo a medias del nivel en curso (los borradores no forman parte de la cadena).
 - El glosario tiene 16 términos (el encargo hablaba de 15, pero listaba 16).

@@ -66,7 +66,7 @@ export const SCHEMAS = {
     members: [{ role: 'string', specialty: 'string', avatar: 'string', initial: 'string' }]
   },
   session_start: { session: 'number' },
-  session_pause: { session: 'number', elapsedSec: 'number', auto: 'boolean' },
+  session_pause: { session: 'number', elapsedSec: 'number', auto: 'boolean', completed: 'boolean' },
   hint_used: { level: 'number', hint: 'number' },
   level_completed: {
     level: 'number', points: 'number', hintsUsed: 'number', attempts: 'number',

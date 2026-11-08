@@ -1,16 +1,23 @@
-// Lectura en veu alta amb la Web Speech API (speechSynthesis), sense xarxa.
+// Lectura en veu alta amb la Web Speech API (speechSynthesis).
+// - Només es fan servir veus de l'idioma actiu (ca → ca-ES, es → es-ES...).
+// - Es prefereixen les veus locals del dispositiu (localService): les veus «en línia»
+//   envien el text a un servidor extern del fabricant del navegador.
+// - L'usuari pot triar la veu (o cap) al menú d'accessibilitat; es desa a les preferències.
 import { t, getLang, langInfo, onLangChange } from './i18n.js';
-import { toast } from './ui.js';
+import { toast, getPrefs, setPrefs } from './ui.js';
 
 const synth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
 const buttons = new Set();
+const voiceListeners = new Set();
 let voices = [];
 let speakingBtn = null;
+export const NO_VOICE = 'none';
 
 function refreshVoices() {
   if (!synth) return;
   voices = synth.getVoices();
   updateButtons();
+  voiceListeners.forEach((fn) => fn());
 }
 
 if (synth) {
@@ -19,18 +26,42 @@ if (synth) {
   onLangChange(() => { stop(); updateButtons(); });
 }
 
+export function onVoicesChanged(fn) {
+  voiceListeners.add(fn);
+  return () => voiceListeners.delete(fn);
+}
+
 function norm(l) {
-  return String(l).toLowerCase().replace('_', '-');
+  return String(l).toLowerCase().replace(/_/g, '-');
+}
+
+/** Veus del dispositiu per a un idioma, ordenades: locals primer, després la regió preferida. */
+export function voicesFor(code = getLang()) {
+  if (!synth) return [];
+  const base = code.toLowerCase();
+  const preferred = (langInfo(code)?.speech ?? [code]).map(norm);
+  const list = voices.filter((v) => { const l = norm(v.lang); return l === base || l.startsWith(base + '-'); });
+  const rank = (v) => (v.localService === false ? 10 : 0) + (preferred.includes(norm(v.lang)) ? 0 : 1);
+  return list.sort((a, b) => rank(a) - rank(b));
+}
+
+export function voicePref(code = getLang()) {
+  return (getPrefs().voices || {})[code] ?? null;
+}
+
+export function setVoicePref(code, uri) {
+  const v = { ...(getPrefs().voices || {}) };
+  if (uri) v[code] = uri; else delete v[code];
+  setPrefs({ voices: v });
+  stop();
+  updateButtons();
 }
 
 export function voiceFor(code = getLang()) {
-  if (!synth) return null;
-  const prefs = (langInfo(code)?.speech ?? [code]).map(norm);
-  for (const p of prefs) {
-    const v = voices.find((x) => norm(x.lang) === p) || voices.find((x) => norm(x.lang).startsWith(p.split('-')[0] + '-') || norm(x.lang) === p.split('-')[0]);
-    if (v) return v;
-  }
-  return null;
+  const list = voicesFor(code);
+  const pref = voicePref(code);
+  if (pref === NO_VOICE) return null;
+  return (pref && list.find((v) => v.voiceURI === pref)) || list[0] || null;
 }
 
 export function canSpeak(code = getLang()) {
@@ -52,8 +83,9 @@ export function speak(text, btn) {
   if (speakingBtn === btn && synth.speaking) { stop(); return; }
   stop();
   const u = new SpeechSynthesisUtterance(text);
+  // la llengua sempre és la de l'idioma actiu, encara que el navegador ignori la veu triada
+  u.lang = norm(voice.lang).startsWith(getLang()) ? String(voice.lang).replace(/_/g, '-') : (langInfo().speech?.[0] ?? getLang());
   try { u.voice = voice; } catch { /* alguns navegadors només accepten la llengua */ }
-  u.lang = voice.lang;
   u.rate = 0.95;
   u.onend = u.onerror = () => { if (speakingBtn === btn) stop(); };
   speakingBtn = btn;

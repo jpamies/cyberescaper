@@ -69,7 +69,7 @@ function teamCard(r) {
         h('tr', {}, h('th', { scope: 'row' }, t('teacher.points')), h('td', {}, String(st.points))),
         h('tr', {}, h('th', { scope: 'row' }, t('teacher.hintsByLevel')), h('td', {}, Array.from({ length: LEVEL_COUNT }, (_, l) => `N${l}: ${st.hints[l].length}`).join(' · '))),
         h('tr', {}, h('th', { scope: 'row' }, t('teacher.hintsBySession')), h('td', {}, SESSIONS.map((s) => `S${s}: ${st.hintsBySession[s] || 0}`).join(' · '))),
-        h('tr', {}, h('th', { scope: 'row' }, t('teacher.timeBySession')), h('td', {}, SESSIONS.map((s) => `S${s}: ${st.sessions[s].started ? fmtMin(st.sessions[s].elapsedSec) : '—'}${s in st.overtime ? ' ⏱+' : ''}`).join(' · ')))
+        h('tr', {}, h('th', { scope: 'row' }, t('teacher.timeBySession')), h('td', {}, SESSIONS.map((s) => `S${s}: ${st.sessions[s].started ? fmtMin(st.sessions[s].elapsedSec) : '—'}${s in st.overtime ? ' ⏱+' : ''}${st.sessions[s].completed ? ' ✔' : ''}`).join(' · ')))
       ))),
     h('details', {}, h('summary', {}, t('teacher.reports')),
       Array.from({ length: LEVEL_COUNT }, (_, l) => st.completed[l]

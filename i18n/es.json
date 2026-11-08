@@ -16,7 +16,16 @@
     "listen": "Escuchar en voz alta",
     "listenLabel": "Escuchar en voz alta: {what}",
     "noVoice": "Este dispositivo no tiene ninguna voz en {lang}. La lectura en voz alta no está disponible.",
-    "skip": "Saltar al contenido"
+    "skip": "Saltar al contenido",
+    "voice": "Voz para leer en voz alta",
+    "voiceAuto": "Automática: {name}",
+    "voiceOff": "Ninguna (no leer en voz alta)",
+    "voiceNone": "No hay ninguna voz en {lang} en este dispositivo",
+    "voiceOnline": "en línea",
+    "voiceTest": "Probar",
+    "voiceSample": "¡Hola! Esta es la voz que leerá los textos de CyberEscaper.",
+    "voiceUsing": "Voz actual: {name}.",
+    "voiceHelp": "Si no suena en {lang}, elegid otra voz o instalad una en el sistema (Configuración → Hora e idioma → Voz). Las voces «en línea» envían el texto al servidor del navegador."
   },
   "nav": {
     "label": "Navegación principal",
@@ -133,7 +142,8 @@
     "statusLocked": "Bloqueado",
     "lockedHelp": "Superad el nivel anterior para abrirlo.",
     "lockedToast": "Este nivel todavía está bloqueado.",
-    "sessionN": "sesión {s}"
+    "sessionN": "sesión {s}",
+    "statusNeedSession": "Hay que activar la sesión {s}"
   },
   "timer": {
     "title": "Temporizador de la sesión",
@@ -149,9 +159,25 @@
     "overtimeShort": "S{s} · prórroga +{time}",
     "runningLong": "Sesión {s} en marcha. Quedan {time} minutos.",
     "overtimeLong": "Sesión {s} en prórroga: +{time}.",
-    "explain": "Es una cuenta atrás de 50 minutos por sesión. Cuando llega a cero no se bloquea nada: entráis en prórroga y se restan {n} puntos una sola vez. Las pausas quedan registradas.",
+    "explain": "Cada sesión tiene {min} minutos. Para jugar los niveles, activad la sesión al empezar la clase: el reloj empieza a contar. Cuando superéis todos los niveles de la sesión, el reloj se para y se pone en verde con el tiempo que ha sobrado. Si llega a cero no se bloquea nada: entráis en prórroga y se restan {n} puntos una sola vez. Las pausas quedan registradas.",
     "minutesLeft": "Quedan {n} minutos de sesión.",
-    "overtimeStarted": "Se ha acabado el tiempo. Entráis en prórroga: se restan {n} puntos."
+    "overtimeStarted": "Se ha acabado el tiempo. Entráis en prórroga: se restan {n} puntos.",
+    "left": "sobran {time}",
+    "over": "prórroga +{time}",
+    "completedShort": "S{s} completada · {left}",
+    "completedLong": "Sesión {s} completada: {left}.",
+    "doneButton": "Sesión {s} completada ({left})",
+    "notYet": "Primero hay que haber empezado la sesión {p}.",
+    "sessionDoneMsg": "¡Sesión {s} completada! Habéis superado todos los niveles de la sesión: {left}.",
+    "sessionDoneNext": "En la próxima clase, activad la sesión {s} para continuar."
+  },
+  "gate": {
+    "title": "Activad la sesión {s} para jugar",
+    "text": "Este nivel es de la sesión {s}. Activadla al empezar la clase: el temporizador empezará a contar {min} minutos. Cuando superéis todos los niveles de la sesión, el reloj se parará en verde.",
+    "later": "Ahora tenéis activa la sesión {active}, pero este nivel es de la sesión {s}. Todavía no podéis jugarlo.",
+    "none": "Todavía no se puede activar: primero hay que haber empezado la sesión anterior.",
+    "help": "Podéis acabar niveles atrasados en una sesión posterior, pero no podéis avanzar niveles de una sesión que todavía no habéis activado.",
+    "lock": "La sesión está en pausa. Activadla para poder abrir el candado."
   },
   "download": {
     "title": "Descargar progreso",
@@ -196,16 +222,33 @@
     "successTitle": "Nivel {n} superado",
     "noHintsBadge": "Insignia «Sin pistas»: ¡habéis superado el nivel sin usar ninguna Tarjeta Firewall!",
     "nextLevel": "Ir al nivel {n}",
-    "toFinal": "Restaurar el sistema",
-    "sessionEnd": "Aquí acaba el trabajo de la sesión {s}. Si todavía tenéis tiempo, podéis continuar o descargar el progreso en el mapa."
+    "toFinal": "Restaurar el sistema"
   },
   "badges": {
-    "access": { "name": "Acceso concedido", "icon": "🔓" },
-    "passwords": { "name": "Guardián de contraseñas", "icon": "🔑" },
-    "phishing": { "name": "Cazador de phishing", "icon": "🎣" },
-    "identity": { "name": "Protector de identidad", "icon": "🪪" },
-    "crypto": { "name": "Criptógrafo", "icon": "🔐" },
-    "nohints": { "name": "Sin pistas", "icon": "🌟" }
+    "access": {
+      "name": "Acceso concedido",
+      "icon": "🔓"
+    },
+    "passwords": {
+      "name": "Guardián de contraseñas",
+      "icon": "🔑"
+    },
+    "phishing": {
+      "name": "Cazador de phishing",
+      "icon": "🎣"
+    },
+    "identity": {
+      "name": "Protector de identidad",
+      "icon": "🪪"
+    },
+    "crypto": {
+      "name": "Criptógrafo",
+      "icon": "🔐"
+    },
+    "nohints": {
+      "name": "Sin pistas",
+      "icon": "🌟"
+    }
   },
   "summary": {
     "yes": "sí",
@@ -280,16 +323,46 @@
       "postit1": "Contraseña:"
     },
     "zones": {
-      "postit": { "label": "Pósit pegado al monitor", "explain": "Es un riesgo. Una contraseña escrita en un pósit la puede ver cualquier persona que pase. Las contraseñas se recuerdan o se guardan en un gestor de contraseñas." },
-      "session": { "label": "Ventana de la sesión", "explain": "Es un riesgo. La sesión está abierta y el ordenador no está bloqueado. Cuando os levantéis, bloqueadlo (Windows + L)." },
-      "usb": { "label": "Memoria USB roja", "explain": "Es un riesgo. Un USB desconocido puede llevar programas maliciosos (malware). No conectéis nunca un USB si no sabéis de dónde viene." },
-      "email": { "label": "Correo abierto", "explain": "Es un riesgo. El correo mete prisa y pide pulsar un enlace para «verificar la cuenta». Es phishing." },
-      "wifi": { "label": "Icono de la red wifi", "explain": "Es un riesgo. «WiFi_Gratis» es una red abierta, sin contraseña. Alguien podría espiar lo que se envía." },
-      "antivirus": { "label": "Aviso en la esquina de la pantalla", "explain": "Es un riesgo. El antivirus está desactivado y el ordenador queda indefenso ante el malware." },
-      "update": { "label": "Ventana de actualización", "explain": "Es un riesgo. Aplazar la actualización 30 días deja abiertos agujeros de seguridad que los atacantes conocen." },
-      "file": { "label": "Archivo del escritorio", "explain": "Es un riesgo. Un archivo «contraseñas.txt» en el escritorio es el primer sitio donde miraría un atacante." },
-      "plant": { "label": "Planta", "explain": "Esto no es un riesgo. Es solo una planta (y quizá necesita agua)." },
-      "calendar": { "label": "Calendario de la pared", "explain": "Esto no es un riesgo. Es el calendario escolar, que es información pública." }
+      "postit": {
+        "label": "Pósit pegado al monitor",
+        "explain": "Es un riesgo. Una contraseña escrita en un pósit la puede ver cualquier persona que pase. Las contraseñas se recuerdan o se guardan en un gestor de contraseñas."
+      },
+      "session": {
+        "label": "Ventana de la sesión",
+        "explain": "Es un riesgo. La sesión está abierta y el ordenador no está bloqueado. Cuando os levantéis, bloqueadlo (Windows + L)."
+      },
+      "usb": {
+        "label": "Memoria USB roja",
+        "explain": "Es un riesgo. Un USB desconocido puede llevar programas maliciosos (malware). No conectéis nunca un USB si no sabéis de dónde viene."
+      },
+      "email": {
+        "label": "Correo abierto",
+        "explain": "Es un riesgo. El correo mete prisa y pide pulsar un enlace para «verificar la cuenta». Es phishing."
+      },
+      "wifi": {
+        "label": "Icono de la red wifi",
+        "explain": "Es un riesgo. «WiFi_Gratis» es una red abierta, sin contraseña. Alguien podría espiar lo que se envía."
+      },
+      "antivirus": {
+        "label": "Aviso en la esquina de la pantalla",
+        "explain": "Es un riesgo. El antivirus está desactivado y el ordenador queda indefenso ante el malware."
+      },
+      "update": {
+        "label": "Ventana de actualización",
+        "explain": "Es un riesgo. Aplazar la actualización 30 días deja abiertos agujeros de seguridad que los atacantes conocen."
+      },
+      "file": {
+        "label": "Archivo del escritorio",
+        "explain": "Es un riesgo. Un archivo «contraseñas.txt» en el escritorio es el primer sitio donde miraría un atacante."
+      },
+      "plant": {
+        "label": "Planta",
+        "explain": "Esto no es un riesgo. Es solo una planta (y quizá necesita agua)."
+      },
+      "calendar": {
+        "label": "Calendario de la pared",
+        "explain": "Esto no es un riesgo. Es el calendario escolar, que es información pública."
+      }
     },
     "hints": [
       "Mirad la escena poco a poco: el monitor, las ventanas de la pantalla, la barra de abajo, la mesa y los cables. Los riesgos pueden ser objetos, ventanas o iconos.",
@@ -303,7 +376,11 @@
     "task": "Parte A: clasificad 5 contraseñas inventadas. Parte B: cread una frase de contraseña con el método de la frase.",
     "partA": "Parte A · Clasificad las contraseñas",
     "partAHelp": "Todas son inventadas. Decidid si cada contraseña es débil, media o robusta. Podéis usar el comprobador.",
-    "levels": { "weak": "Débil", "medium": "Media", "strong": "Robusta" },
+    "levels": {
+      "weak": "Débil",
+      "medium": "Media",
+      "strong": "Robusta"
+    },
     "checker": {
       "title": "Comprobador de robustez",
       "note": "Funciona dentro del navegador: lo que escribís no se envía ni se guarda en ningún sitio.",
@@ -360,7 +437,12 @@
     "intro": "Ahora atacaremos por el móvil. Correo, SMS, WhatsApp, Instagram... A veces somos nosotros y a veces no. ¿Sabréis distinguirlo?",
     "task": "Revisad los 8 mensajes del móvil del SOC. La pregunta no es de qué app viene, sino qué os pide y quién os lo envía.",
     "phone": "Móvil del SOC",
-    "channels": { "email": "Correo", "sms": "SMS", "whatsapp": "WhatsApp", "instagram": "Instagram" },
+    "channels": {
+      "email": "Correo",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "instagram": "Instagram"
+    },
     "pending": "{n} por revisar",
     "done": "revisado ✔",
     "msgN": "Mensaje {n}",
@@ -554,16 +636,46 @@
     "chooseMeasure": "Elegid una medida...",
     "measureKo": "Esta medida no es la mejor para este dato. Pensadlo otra vez.",
     "items": {
-      "birth": { "label": "Fecha de nacimiento en la biografía", "why": "Con la fecha de nacimiento se pueden adivinar contraseñas y respuestas de seguridad. No se debe publicar." },
-      "phone": { "label": "Teléfono en la biografía", "why": "Cualquier persona podría llamarla o enviarle mensajes. El teléfono no se publica." },
-      "school": { "label": "Nombre del instituto en el uniforme", "why": "Dice a desconocidos dónde está cada día. Mejor eliminar la foto o hacer el perfil privado." },
-      "location": { "label": "Ubicación en tiempo real", "why": "Dice dónde está ahora mismo. Hay que desactivar la ubicación (o eliminar la publicación)." },
-      "pet": { "label": "Nombre de la mascota", "why": "«Nombre de tu mascota» es una pregunta de seguridad típica: ¡es la respuesta para recuperar su correo!" },
-      "street": { "label": "Calle y portal de casa", "why": "La foto muestra dónde vive. Hay que eliminar la publicación." },
-      "schedule": { "label": "Horario de entrenamiento", "why": "Dice dónde estará cada semana y a qué hora. Mejor no publicarlo." },
-      "ticket": { "label": "Código del billete de viaje", "why": "Con el código alguien podría cambiar o cancelar el viaje y, además, dice que la casa estará vacía. Hay que eliminarlo." },
-      "hobby": { "label": "Afición al baloncesto", "why": "Esto no es un riesgo: decir que te gusta un deporte, sin datos concretos, no te pone en peligro." },
-      "firstday": { "label": "Texto «Primer día de curso»", "why": "El texto solo no es un riesgo. Fijaos bien en la foto, en cambio..." }
+      "birth": {
+        "label": "Fecha de nacimiento en la biografía",
+        "why": "Con la fecha de nacimiento se pueden adivinar contraseñas y respuestas de seguridad. No se debe publicar."
+      },
+      "phone": {
+        "label": "Teléfono en la biografía",
+        "why": "Cualquier persona podría llamarla o enviarle mensajes. El teléfono no se publica."
+      },
+      "school": {
+        "label": "Nombre del instituto en el uniforme",
+        "why": "Dice a desconocidos dónde está cada día. Mejor eliminar la foto o hacer el perfil privado."
+      },
+      "location": {
+        "label": "Ubicación en tiempo real",
+        "why": "Dice dónde está ahora mismo. Hay que desactivar la ubicación (o eliminar la publicación)."
+      },
+      "pet": {
+        "label": "Nombre de la mascota",
+        "why": "«Nombre de tu mascota» es una pregunta de seguridad típica: ¡es la respuesta para recuperar su correo!"
+      },
+      "street": {
+        "label": "Calle y portal de casa",
+        "why": "La foto muestra dónde vive. Hay que eliminar la publicación."
+      },
+      "schedule": {
+        "label": "Horario de entrenamiento",
+        "why": "Dice dónde estará cada semana y a qué hora. Mejor no publicarlo."
+      },
+      "ticket": {
+        "label": "Código del billete de viaje",
+        "why": "Con el código alguien podría cambiar o cancelar el viaje y, además, dice que la casa estará vacía. Hay que eliminarlo."
+      },
+      "hobby": {
+        "label": "Afición al baloncesto",
+        "why": "Esto no es un riesgo: decir que te gusta un deporte, sin datos concretos, no te pone en peligro."
+      },
+      "firstday": {
+        "label": "Texto «Primer día de curso»",
+        "why": "El texto solo no es un riesgo. Fijaos bien en la foto, en cambio..."
+      }
     },
     "foundOne": "Dato encontrado: {what}. Ahora elegid una medida en la lista de abajo.",
     "foundTitle": "Datos encontrados",
@@ -690,22 +802,70 @@
     "title": "Glosario",
     "help": "Palabras clave de la ciberseguridad, en catalán y en castellano.",
     "terms": {
-      "password": { "term": "contraseña", "def": "Palabra o frase secreta para entrar en una cuenta. Solo la sabéis vosotros." },
-      "link": { "term": "enlace", "def": "Texto o botón que lleva a una página web. Antes de pulsar, mirad adónde lleva." },
-      "sender": { "term": "remitente", "def": "Quien envía un mensaje o un correo. Se puede falsificar." },
-      "attachment": { "term": "archivo adjunto", "def": "Archivo que va con un correo o un mensaje. Puede llevar malware." },
-      "phishing": { "term": "phishing", "def": "Engaño para robar contraseñas o datos haciéndose pasar por alguien de confianza." },
-      "smishing": { "term": "smishing", "def": "Phishing que llega por SMS." },
-      "malware": { "term": "malware (programa malicioso)", "def": "Programa hecho para hacer daño: espiar, robar datos o estropear el ordenador." },
-      "ransomware": { "term": "ransomware", "def": "Malware que bloquea o cifra los datos y pide un rescate para devolverlos." },
-      "encrypt": { "term": "cifrar", "def": "Transformar un mensaje para que solo lo pueda leer quien tiene la clave." },
-      "decrypt": { "term": "descifrar", "def": "Devolver un mensaje cifrado al texto original con la clave." },
-      "hash": { "term": "hash", "def": "«Huella» de unos datos. Si cambia una sola letra, el hash cambia por completo." },
-      "twofa": { "term": "verificación en dos pasos", "def": "Entrar con la contraseña y, además, con un código del móvil o de una app." },
-      "backup": { "term": "copia de seguridad", "def": "Copia de los datos en otro sitio para no perderlos." },
-      "privacy": { "term": "privacidad", "def": "Derecho a decidir quién ve vuestra información personal." },
-      "footprint": { "term": "huella digital", "def": "Todo el rastro que dejáis en internet: publicaciones, fotos, búsquedas..." },
-      "update": { "term": "actualización", "def": "Versión nueva de un programa que a menudo tapa agujeros de seguridad." }
+      "password": {
+        "term": "contraseña",
+        "def": "Palabra o frase secreta para entrar en una cuenta. Solo la sabéis vosotros."
+      },
+      "link": {
+        "term": "enlace",
+        "def": "Texto o botón que lleva a una página web. Antes de pulsar, mirad adónde lleva."
+      },
+      "sender": {
+        "term": "remitente",
+        "def": "Quien envía un mensaje o un correo. Se puede falsificar."
+      },
+      "attachment": {
+        "term": "archivo adjunto",
+        "def": "Archivo que va con un correo o un mensaje. Puede llevar malware."
+      },
+      "phishing": {
+        "term": "phishing",
+        "def": "Engaño para robar contraseñas o datos haciéndose pasar por alguien de confianza."
+      },
+      "smishing": {
+        "term": "smishing",
+        "def": "Phishing que llega por SMS."
+      },
+      "malware": {
+        "term": "malware (programa malicioso)",
+        "def": "Programa hecho para hacer daño: espiar, robar datos o estropear el ordenador."
+      },
+      "ransomware": {
+        "term": "ransomware",
+        "def": "Malware que bloquea o cifra los datos y pide un rescate para devolverlos."
+      },
+      "encrypt": {
+        "term": "cifrar",
+        "def": "Transformar un mensaje para que solo lo pueda leer quien tiene la clave."
+      },
+      "decrypt": {
+        "term": "descifrar",
+        "def": "Devolver un mensaje cifrado al texto original con la clave."
+      },
+      "hash": {
+        "term": "hash",
+        "def": "«Huella» de unos datos. Si cambia una sola letra, el hash cambia por completo."
+      },
+      "twofa": {
+        "term": "verificación en dos pasos",
+        "def": "Entrar con la contraseña y, además, con un código del móvil o de una app."
+      },
+      "backup": {
+        "term": "copia de seguridad",
+        "def": "Copia de los datos en otro sitio para no perderlos."
+      },
+      "privacy": {
+        "term": "privacidad",
+        "def": "Derecho a decidir quién ve vuestra información personal."
+      },
+      "footprint": {
+        "term": "huella digital",
+        "def": "Todo el rastro que dejáis en internet: publicaciones, fotos, búsquedas..."
+      },
+      "update": {
+        "term": "actualización",
+        "def": "Versión nueva de un programa que a menudo tapa agujeros de seguridad."
+      }
     }
   },
   "pdf": {
@@ -744,7 +904,8 @@
     "codeExplain": "Este código es la cadena completa comprimida. Se puede pegar en la página docente para verificarla o en «Importar partida» para continuar.",
     "qrNote": "El código QR contiene el mismo código de verificación.",
     "qrTooBig": "El código es demasiado largo para un QR: usad el texto de arriba o el archivo JSON.",
-    "footer": "Documento generado sin servidor. No contiene datos personales."
+    "footer": "Documento generado sin servidor. No contiene datos personales.",
+    "completed": "completada"
   },
   "teacher": {
     "title": "Página docente",
@@ -821,7 +982,7 @@
     "usageTitle": "Instrucciones de uso",
     "usage": [
       "Antes de la sesión 2: abrid la app en los ordenadores del centro y comprobad que se ve la portada. Funciona sin internet una vez cargada.",
-      "Sesión 2: cada equipo crea su alias (sin nombres reales), elige roles y especialidades y pulsa «Iniciar sesión 2». Hacen el nivel 0.",
+      "Sesión 2: cada equipo crea su alias (sin nombres reales), elige roles y especialidades y pulsa «Iniciar sesión 2». Sin activar la sesión no se puede jugar. Tienen 30 minutos para el nivel 0; si lo acaban antes, el reloj se para en verde con el tiempo que ha sobrado.",
       "Al final de cada sesión: «Pausar sesión» y «Descargar el JSON» desde el mapa. Si el ordenador puede cambiar, guardad el JSON (carpeta compartida o USB del centro).",
       "Sesión 3: si el progreso no está, «Importar partida» con el JSON. «Iniciar sesión 3». Niveles 1 y 2.",
       "Sesión 4: «Iniciar sesión 4». Niveles 3 y 4. Al final, descargar el PDF y el JSON, entregarlos y pulsar «Cerrar y borrar datos de este ordenador».",

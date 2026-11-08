@@ -6,7 +6,7 @@ export const LEVEL_POINTS = [10, 20, 20, 25, 25];
 export const HINT_COST = 2;
 export const HINTS_PER_LEVEL = 3;
 export const OVERTIME_PENALTY = 5;
-export const SESSION_SECONDS = 50 * 60;
+export const SESSION_SECONDS = 30 * 60; // 30 min de joc per sessió (10 min abans i després per preparar)
 export const SESSIONS = [2, 3, 4];
 export const LEVEL_SESSION = { 0: 2, 1: 3, 2: 3, 3: 4, 4: 4 };
 export const LEVEL0_CODE = 8;
@@ -27,7 +27,7 @@ export function deriveState(chain, now = Date.now()) {
     final: null,
     lastTimestamp: null
   };
-  for (const s of SESSIONS) st.sessions[s] = { elapsedSec: 0, running: false, startedAt: null, base: 0, started: false };
+  for (const s of SESSIONS) st.sessions[s] = { elapsedSec: 0, running: false, startedAt: null, base: 0, started: false, completed: false };
   for (let l = 0; l < LEVEL_COUNT; l++) st.hints[l] = [];
 
   let lastStarted = null;
@@ -61,6 +61,7 @@ export function deriveState(chain, now = Date.now()) {
         s.elapsedSec = typeof d.elapsedSec === 'number' ? d.elapsedSec : s.base + Math.max(0, (ts - s.startedAt) / 1000);
         s.base = s.elapsedSec;
         s.startedAt = null;
+        if (d.completed) s.completed = true;
         if (st.activeSession === d.session) st.activeSession = null;
         break;
       }
@@ -128,6 +129,38 @@ export function isLevelUnlocked(st, level) {
   return level <= st.currentLevel;
 }
 
+export function levelsOfSession(session) {
+  return Object.keys(LEVEL_SESSION).map(Number).filter((l) => LEVEL_SESSION[l] === session);
+}
+
+/** Tots els nivells d'aquesta sessió estan superats. */
+export function sessionLevelsDone(st, session) {
+  return levelsOfSession(session).every((l) => l in st.completed);
+}
+
+/** Es pot iniciar (o reprendre) la sessió? Han d'anar en ordre i no pot estar completada. */
+export function canStartSession(st, session) {
+  const ses = st.sessions[session];
+  if (!ses || ses.completed) return false;
+  return session === SESSIONS[0] || st.sessions[session - 1].started;
+}
+
+/**
+ * Es pot jugar el nivell ara? Cal tenir activa una sessió igual o posterior a la del nivell
+ * (així un equip endarrerit pot recuperar nivells en una sessió posterior, però ningú no
+ * pot avançar nivells d'una sessió que encara no ha activat).
+ * Retorna { ok, reason: 'locked' | 'noSession' | 'laterSession', session }.
+ */
+export function levelAccess(st, level) {
+  if (level in st.completed) return { ok: true };
+  if (level > st.currentLevel) return { ok: false, reason: 'locked' };
+  const need = LEVEL_SESSION[level];
+  const active = st.activeSession;
+  if (!active) return { ok: false, reason: 'noSession', session: need };
+  if (active < need) return { ok: false, reason: 'laterSession', session: need, active };
+  return { ok: true, session: active };
+}
+
 /** Resum comparable de l'estat (per comprovar que una importació el restaura igual). */
 export function stateFingerprint(st) {
   return JSON.stringify({
@@ -139,6 +172,7 @@ export function stateFingerprint(st) {
     hints: st.hints,
     completed: Object.keys(st.completed),
     overtime: st.overtime,
+    sessionsCompleted: SESSIONS.filter((s) => st.sessions[s].completed),
     finished: st.finished
   });
 }

@@ -4,7 +4,8 @@ import { t } from '../i18n.js';
 import { h, clear, announce, dialog, shadowMessage } from '../ui.js';
 import { speakButton } from '../tts.js';
 import * as state from '../state.js';
-import { LEVEL_POINTS, HINT_COST, HINTS_PER_LEVEL, LEVEL0_CODE, BADGES, LEVEL_SESSION } from '../derive.js';
+import { LEVEL_POINTS, HINT_COST, HINTS_PER_LEVEL, LEVEL0_CODE, BADGES, LEVEL_SESSION, SESSIONS, SESSION_SECONDS, levelAccess, canStartSession } from '../derive.js';
+import * as timer from '../timer.js';
 import { finalData, scoreSummary } from '../summary.js';
 
 export const REPORT_MIN = 40;
@@ -39,6 +40,13 @@ export function renderLevel(root, level, def, { navigate }) {
 
   if (level in st.completed) {
     root.append(completedCard(level, st.completed[level], navigate));
+    return;
+  }
+
+  // Per jugar cal tenir activa la sessió del nivell (o una de posterior).
+  const access = levelAccess(st, level);
+  if (!access.ok) {
+    root.append(sessionGate(level, access, navigate));
     return;
   }
 
@@ -82,6 +90,12 @@ export function renderLevel(root, level, def, { navigate }) {
   ));
 
   lockBtn.addEventListener('click', async () => {
+    if (!levelAccess(state.derivedNow(), level).ok) {
+      lockStatus.className = 'lock-status closed';
+      clear(lockStatus).append(h('span', { 'aria-hidden': 'true' }, '⏸ '), t('gate.lock'));
+      announce(t('gate.lock'), { assertive: true });
+      return;
+    }
     const result = await def.check(draft);
     const report = textarea.value.trim();
     let reason = null;
@@ -103,11 +117,35 @@ export function renderLevel(root, level, def, { navigate }) {
       attempts: (draft.attempts || 0) + 1, score: result.score, report
     };
     await state.append('level_completed', data);
+    // si ja s'han superat tots els nivells de la sessió, el rellotge s'atura i es posa en verd
+    const sessionDone = await timer.completeIfDone();
     if (level === 4) await state.append('final', finalData(state.derived()));
     state.setDraft(level, null);
     announce(t('lock.opened', { points: LEVEL_POINTS[level] }), { assertive: true });
-    showSuccess(root, level, def.success?.(draft), navigate);
+    showSuccess(root, level, def.success?.(draft), navigate, sessionDone);
   });
+}
+
+function sessionGate(level, access, navigate) {
+  if (access.reason === 'locked') {
+    return h('section', { class: 'card gate' }, h('h2', {}, '🔒 ', t('map.lockedToast')), h('a', { class: 'btn', href: '#/mapa' }, t('nav.map')));
+  }
+  const st = state.derived();
+  const need = access.session;
+  const rerender = () => navigate(location.hash, { replace: true });
+  // sessions que permeten jugar aquest nivell i que es poden iniciar o reprendre
+  const options = SESSIONS.filter((n) => n >= need && canStartSession(st, n));
+  const text = access.reason === 'laterSession'
+    ? t('gate.later', { active: access.active, s: need })
+    : t('gate.text', { s: need, min: SESSION_SECONDS / 60 });
+  return h('section', { class: 'card gate', 'aria-labelledby': 'gate-h' },
+    h('h2', { id: 'gate-h' }, h('span', { 'aria-hidden': 'true' }, '⏱ '), t('gate.title', { s: need })),
+    h('p', {}, text),
+    options.length
+      ? h('div', { class: 'btn-row' }, options.map((n) => timer.sessionButton(n, { onDone: rerender })))
+      : h('p', { class: 'muted' }, t('gate.none')),
+    h('p', { class: 'muted small' }, t('gate.help')),
+    h('a', { class: 'btn', href: '#/mapa' }, t('nav.map')));
 }
 
 function specialistLine(level, st) {
@@ -127,7 +165,7 @@ function badgeNode(level) {
     h('strong', {}, t(`badges.${b}.name`)));
 }
 
-function showSuccess(root, level, extra, navigate) {
+function showSuccess(root, level, extra, navigate, sessionDone) {
   clear(root);
   const st = state.derived();
   const h1 = h('h1', { tabindex: '-1' }, '🔓 ', t('lock.successTitle', { n: level }));
@@ -142,8 +180,9 @@ function showSuccess(root, level, extra, navigate) {
       level === 0 ? h('p', { class: 'code-recovered' }, t('level0.codeRecovered', { code: LEVEL0_CODE })) : null,
       level === 0 ? h('p', {}, t('level0.codeNote')) : null,
       extra || null,
-      level < 4 && LEVEL_SESSION[level + 1] !== LEVEL_SESSION[level]
-        ? h('p', { class: 'muted' }, t('lock.sessionEnd', { s: LEVEL_SESSION[level] })) : null,
+      sessionDone ? h('p', { class: 'session-done' }, h('span', { 'aria-hidden': 'true' }, '✅ '),
+        t('timer.sessionDoneMsg', { s: sessionDone.session, left: timer.leftText(sessionDone.remaining) })) : null,
+      sessionDone && level < 4 ? h('p', { class: 'muted' }, t('timer.sessionDoneNext', { s: LEVEL_SESSION[level + 1] })) : null,
       h('div', { class: 'btn-row' },
         level === 4 ? h('a', { class: 'btn btn-primary', href: '#/final' }, t('lock.toFinal')) : next,
         h('a', { class: 'btn', href: '#/mapa' }, t('nav.map')))

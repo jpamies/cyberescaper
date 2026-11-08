@@ -1,11 +1,11 @@
 // CyberEscaper 4.0 · router per hash i pantalles generals.
 import { LANGS, DEFAULT_LANG, setLang, getLang, t, onLangChange, loadDict, lookup } from './i18n.js';
 import { h, clear, announce, toast, dialog, getPrefs, setPrefs, applyPrefs, shadowMessage, downloadBlob } from './ui.js';
-import { speakButton, stop as stopSpeech } from './tts.js';
+import { speakButton, stop as stopSpeech, speak, voicesFor, voiceFor, voicePref, setVoicePref, onVoicesChanged, NO_VOICE } from './tts.js';
 import * as state from './state.js';
 import * as timer from './timer.js';
 import { ALIAS_RE, verifyChain } from './chain.js';
-import { LEVEL_COUNT, LEVEL_POINTS, LEVEL0_CODE, LEVEL_SESSION } from './derive.js';
+import { LEVEL_COUNT, LEVEL_POINTS, LEVEL0_CODE, LEVEL_SESSION, levelAccess } from './derive.js';
 import { exportFileName } from './codec.js';
 import { badgeList, scoreSummary } from './summary.js';
 import { chainCards } from './chainview.js';
@@ -62,6 +62,7 @@ function renderChrome() {
         h('p', { class: 'a11y-row' }, h('span', { class: 'small' }, t('a11y.fontSize')), fontBtns),
         h('p', { class: 'a11y-row' }, toggle('contrast', t('a11y.contrast'), '◐')),
         h('p', { class: 'a11y-row' }, toggle('typewriter', t('a11y.typewriter'), '⌨')),
+        voiceRow(),
         h('p', { class: 'a11y-row' }, h('button', { type: 'button', class: 'btn btn-small', onclick: () => stopSpeech() }, '⏹ ', t('a11y.stop'))))),
     h('div', { class: 'lang-box' }, h('span', { 'aria-hidden': 'true' }, '🌐'), langSel)
   ].filter(Boolean));
@@ -73,6 +74,45 @@ function renderChrome() {
   );
   document.getElementById('skip').textContent = t('a11y.skip');
   document.title = t('meta.appTitle');
+}
+
+// Selector de veu per a la lectura en veu alta (mostra quina veu es fa servir)
+let unsubscribeVoices = null;
+function voiceRow() {
+  const lang = getLang();
+  const label = LANGS.find((l) => l.code === lang)?.label ?? lang;
+  const sel = h('select', { id: 'voice-select', 'aria-describedby': 'voice-help' });
+  const using = h('p', { class: 'small muted', id: 'voice-help', 'aria-live': 'polite' });
+  const test = h('button', { type: 'button', class: 'btn btn-small' }, '🔊 ', t('a11y.voiceTest'));
+  test.addEventListener('click', () => speak(t('a11y.voiceSample'), test));
+  const fill = () => {
+    const list = voicesFor(lang);
+    const pref = voicePref(lang);
+    clear(sel);
+    if (!list.length) {
+      sel.append(h('option', { value: '' }, t('a11y.voiceNone', { lang: label })));
+      sel.disabled = true;
+      test.disabled = true;
+      using.textContent = t('a11y.voiceHelp', { lang: label });
+      return;
+    }
+    sel.disabled = false;
+    test.disabled = false;
+    sel.append(
+      h('option', { value: '', selected: !pref }, t('a11y.voiceAuto', { name: list[0].name })),
+      ...list.map((v) => h('option', { value: v.voiceURI, selected: pref === v.voiceURI },
+        `${v.name} (${v.lang})${v.localService === false ? ' · ' + t('a11y.voiceOnline') : ''}`)),
+      h('option', { value: NO_VOICE, selected: pref === NO_VOICE }, t('a11y.voiceOff')));
+    const v = voiceFor(lang);
+    using.textContent = (v ? t('a11y.voiceUsing', { name: `${v.name} (${v.lang})` }) + ' ' : '') + t('a11y.voiceHelp', { lang: label });
+  };
+  sel.addEventListener('change', () => { setVoicePref(lang, sel.value || null); fill(); });
+  unsubscribeVoices?.();
+  unsubscribeVoices = onVoicesChanged(fill);
+  fill();
+  return h('div', { class: 'a11y-voice' },
+    h('label', { for: 'voice-select' }, t('a11y.voice')),
+    h('div', { class: 'input-row' }, sel, test), using);
 }
 
 // ---------------------------------------------------------------------------
@@ -331,7 +371,9 @@ function renderMap(root) {
   for (let l = 0; l < LEVEL_COUNT; l++) {
     const done = l in st.completed;
     const open = l <= st.currentLevel;
-    const status = done ? t('map.statusDone') : open ? t('map.statusOpen') : t('map.statusLocked');
+    const access = levelAccess(st, l);
+    const needSession = open && !done && !access.ok;
+    const status = done ? t('map.statusDone') : needSession ? t('map.statusNeedSession', { s: LEVEL_SESSION[l] }) : open ? t('map.statusOpen') : t('map.statusLocked');
     const icon = done ? '✅' : open ? '▶️' : '🔒';
     const inner = [
       h('span', { class: 'lvl-icon', 'aria-hidden': 'true' }, icon),
@@ -415,6 +457,12 @@ async function renderGlossary(root) {
   root.append(list, h('p', {}, h('button', { type: 'button', class: 'btn', onclick: () => history.back() }, '← ', t('nav.back'))));
 }
 
+function sessionSignature() {
+  if (!state.hasTeam()) return '';
+  const st = state.derived();
+  return `${st.activeSession}|${[2, 3, 4].map((n) => st.sessions[n].completed).join(',')}`;
+}
+
 // ---------------------------------------------------------------------------
 // Arrencada
 // ---------------------------------------------------------------------------
@@ -433,7 +481,16 @@ async function start() {
     // actualitza la capçalera només quan canvia l'existència de l'equip
     const has = state.hasTeam();
     if (has !== start._hadTeam) { start._hadTeam = has; renderChrome(); }
+    // si s'activa o es pausa la sessió, el mapa i el nivell obert es tornen a dibuixar
+    const sig = sessionSignature();
+    if (sig !== start._sessionSig) {
+      start._sessionSig = sig;
+      const { page, arg } = parseRoute();
+      if (page === 'mapa') render();
+      if (page === 'nivell' && has && !(Number(arg) in state.derived().completed)) render();
+    }
   });
+  start._sessionSig = sessionSignature();
   start._hadTeam = state.hasTeam();
   await render();
 }
